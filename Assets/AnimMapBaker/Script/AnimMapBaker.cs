@@ -87,16 +87,20 @@ public struct BakedData
     public byte[] rawAnimMap;
     public int animMapWidth;
     public int animMapHeight;
+    public Vector3 minPos;
+    public Vector3 maxPos;
 
     #endregion
 
-    public BakedData(string name, float animLen, Texture2D animMap)
+    public BakedData(string name, float animLen, Texture2D animMap, Vector3 minPos, Vector3 maxPos)
     {
         this.name = name;
         this.animLen = animLen;
         this.animMapHeight = animMap.height;
         this.animMapWidth = animMap.width;
         this.rawAnimMap = animMap.GetRawTextureData();
+        this.maxPos = maxPos;
+        this.minPos = minPos;
     }
 }
 
@@ -176,27 +180,54 @@ public class AnimMapBaker{
 
         animMap.name = string.Format("{0}_{1}.animMap", this.animData.Value.name, curAnim.name);
         this.animData.Value.AnimationPlay(curAnim.name);
+        Vector3 minPos = new Vector3(0, 0, 0);
+        Vector3 maxPos = new Vector3(0, 0, 0);
+        //所有帧，所有坐标，最大最小值
+        for(int i = 0; i < curClipFrame; i++)
+        {
+            curAnim.time = sampleTime;
+            this.animData.Value.SampleAnimAndBakeMesh(ref this.bakedMesh);
+            for (int j = 0; j < this.bakedMesh.vertexCount; j++)
+            {
+                Vector3 vertex = this.bakedMesh.vertices[j];
+                if (vertex.x > maxPos.x)
+                    maxPos.x = vertex.x;
+                else if (vertex.x < minPos.x)
+                    minPos.x = vertex.x;
 
+                if (vertex.y > maxPos.y)
+                    maxPos.y = vertex.y;
+                else if (vertex.y < minPos.y)
+                    minPos.y = vertex.y;
+
+                if (vertex.z > maxPos.z)
+                    maxPos.z = vertex.z;
+                else if (vertex.z < minPos.z)
+                    minPos.z = vertex.z;
+            }
+            sampleTime += perFrameTime;
+        }
+        sampleTime = 0;
         for (int i = 0; i < curClipFrame; i++)
         {
             curAnim.time = sampleTime;
 
             this.animData.Value.SampleAnimAndBakeMesh(ref this.bakedMesh);
-            Vector3 minPos = this.bakedMesh.bounds.min;
             //x轴，顶点，y轴帧
-            for(int j = 0; j < this.bakedMesh.vertexCount; j++)
+            for (int j = 0; j < this.bakedMesh.vertexCount; j++)
             {
                 Vector3 vertex = this.bakedMesh.vertices[j];
-                Vector3 diff = vertex - minPos;
-                //setPixel从左下角开始，向右，然后向上，再向右
+                Vector3 diff = new Vector3(0.0f, 0.0f, 0.0f);
+                diff.x = (vertex.x - minPos.x) / (maxPos.x - minPos.x);
+                diff.y = (vertex.y - minPos.y) / (maxPos.y - minPos.y);
+                diff.z = (vertex.z - minPos.z) / (maxPos.z - minPos.z);
                 animMap.SetPixel(j, i, new Color(diff.x, diff.y, diff.z));
             }
-
             sampleTime += perFrameTime;
         }
         animMap.Apply();
 
-        this.bakedDataList.Add(new BakedData(animMap.name, curAnim.clip.length, animMap));
+        this.bakedDataList.Add(new BakedData(animMap.name, curAnim.clip.length, animMap, minPos, maxPos));
     }
     #endregion
 }
