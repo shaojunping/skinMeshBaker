@@ -100,7 +100,6 @@ public class AnimMapBakerWindow : EditorWindow {
     private Texture2D SaveAsAsset(ref BakedData data)
     {
         string folderPath = CreateFolder();
-        //Texture2D animMap = new Texture2D(data.animMapWidth, data.animMapHeight, TextureFormat.RGBAHalf, false);
         Texture2D animMap = new Texture2D(data.animMapWidth, data.animMapHeight, TextureFormat.RGBAHalf, false);
 
         animMap.LoadRawTextureData(data.rawAnimMap);
@@ -152,8 +151,6 @@ public class AnimMapBakerWindow : EditorWindow {
         GameObject go = new GameObject();
         go.AddComponent<MeshRenderer>().sharedMaterial = mat;
         go.AddComponent<MeshFilter>().sharedMesh = targetGo.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh;
-        //GameObject transformGo = targetGo.GetComponentInChildren<SkinnedMeshRenderer>().gameObject;
-        //Transform scale = transformGo.GetComponent<Transform>();
         string folderPath = CreateFolder();
         PrefabUtility.CreatePrefab(Path.Combine(folderPath, data.name + ".prefab").Replace("\\", "/"), go);
     }

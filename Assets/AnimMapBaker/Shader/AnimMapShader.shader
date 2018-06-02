@@ -29,6 +29,7 @@ Shader "chenjd/AnimMapShader"
 
 
 			#include "UnityCG.cginc"
+			#pragma target 3.0
 
 			struct appdata
 			{
