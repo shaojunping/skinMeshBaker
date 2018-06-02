@@ -1,36 +1,47 @@
 fileFormatVersion: 2
-guid: 6573c68abc7271540a55f3e0a4c51489
-timeCreated: 1527819694
+guid: 6d90fa76aa0bf0b40a2a02c37df33c3a
+timeCreated: 1527861703
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: Bone017
-    100002: Bone019
-    100004: Bone020
-    100006: Bone021
-    100008: Bone022
-    100010: Bone024
-    100012: Bone025
-    100014: Bone026
-    100016: Bone027
-    100018: //RootNode
-    100020: Flag_Middle_1
-    400000: Bone017
-    400002: Bone019
-    400004: Bone020
-    400006: Bone021
-    400008: Bone022
-    400010: Bone024
-    400012: Bone025
-    400014: Bone026
-    400016: Bone027
-    400018: //RootNode
-    400020: Flag_Middle_1
-    4300000: Flag_Middle_1
+    100000: Bone001
+    100002: Bone002
+    100004: Bone003
+    100006: Bone004
+    100008: Bone005
+    100010: Bone006
+    100012: Bone008
+    100014: Bone009
+    100016: Bone010
+    100018: Bone011
+    100020: Bone012
+    100022: Bone013
+    100024: Bone015
+    100026: Bone016
+    100028: Flag_Big
+    100030: //RootNode
+    400000: Bone001
+    400002: Bone002
+    400004: Bone003
+    400006: Bone004
+    400008: Bone005
+    400010: Bone006
+    400012: Bone008
+    400014: Bone009
+    400016: Bone010
+    400018: Bone011
+    400020: Bone012
+    400022: Bone013
+    400024: Bone015
+    400026: Bone016
+    400028: Flag_Big
+    400030: //RootNode
+    4300000: Flag_Big
+    7400000: Take 001
     9500000: //RootNode
     11100000: //RootNode
-    13700000: Flag_Middle_1
+    13700000: Flag_Big
   materials:
     importMaterials: 1
     materialName: 0

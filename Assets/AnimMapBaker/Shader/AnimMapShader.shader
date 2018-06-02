@@ -10,6 +10,8 @@ Shader "chenjd/AnimMapShader"
 		_MainTex ("Texture", 2D) = "white" {}
 		_AnimMap ("AnimMap", 2D) ="white" {}
 		_AnimLen("Anim Length", Float) = 0
+		_MinPos("Min Pos", Vector) = (0.0, 0, 0, 0)
+		_MaxPos("Max Pos", Vector) = (0.0, 0, 0, 0)
 	}
 		SubShader
 		{
@@ -47,6 +49,9 @@ Shader "chenjd/AnimMapShader"
 			sampler2D _AnimMap;
 			float4 _AnimMap_TexelSize;//x == 1/width
 
+			float4 _MinPos;
+			float4 _MaxPos;
+
 			float _AnimLen;
 
 			
@@ -62,7 +67,12 @@ Shader "chenjd/AnimMapShader"
 				float animMap_y = f;
 
 				//这里贴图里包含的坐标而不是普通的贴图，所以要用lod0
-				float4 pos = tex2Dlod(_AnimMap, float4(animMap_x * 256, animMap_y * 256, 0, 0));
+				float4 pos = tex2Dlod(_AnimMap, float4(animMap_x, animMap_y, 0, 0));
+				float3 diff = float3(0, 0, 0);
+				diff.x = (_MaxPos.x - _MinPos.x) * pos.x;
+				diff.y = (_MaxPos.y - _MinPos.y) * pos.y;
+				diff.z = (_MaxPos.z - _MinPos.z) * pos.z;
+				pos.xyz = _MinPos.xyz + diff;
 
 				v2f o;
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);

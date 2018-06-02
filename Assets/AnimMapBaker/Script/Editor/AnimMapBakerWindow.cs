@@ -128,6 +128,10 @@ public class AnimMapBakerWindow : EditorWindow {
         mat.SetTexture("_MainTex", smr.sharedMaterial.mainTexture);
         mat.SetTexture("_AnimMap", animMap);
         mat.SetFloat("_AnimLen", data.animLen);
+        Vector4 minPos = new Vector4(data.minPos.x, data.minPos.y, data.minPos.z, 0.0f);
+        Vector4 maxPos = new Vector4(data.maxPos.x, data.maxPos.y, data.maxPos.z, 0.0f);
+        mat.SetVector("_MinPos", minPos);
+        mat.SetVector("_MaxPos", maxPos);
 
         string folderPath = CreateFolder();
         AssetDatabase.CreateAsset(mat, Path.Combine(folderPath, data.name + ".mat"));
@@ -148,7 +152,8 @@ public class AnimMapBakerWindow : EditorWindow {
         GameObject go = new GameObject();
         go.AddComponent<MeshRenderer>().sharedMaterial = mat;
         go.AddComponent<MeshFilter>().sharedMesh = targetGo.GetComponentInChildren<SkinnedMeshRenderer>().sharedMesh;
-
+        //GameObject transformGo = targetGo.GetComponentInChildren<SkinnedMeshRenderer>().gameObject;
+        //Transform scale = transformGo.GetComponent<Transform>();
         string folderPath = CreateFolder();
         PrefabUtility.CreatePrefab(Path.Combine(folderPath, data.name + ".prefab").Replace("\\", "/"), go);
     }
