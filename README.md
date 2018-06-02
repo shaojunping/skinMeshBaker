@@ -1,26 +1,14 @@
-# AnimMap Baker For Animated Characters 
-----
-#### 描述 Description：
-利用GPU实现大规模动画角色的渲染。
-* anim map for vertex shader to modify the vertex position of the mesh at runtime.
+参考：
+https://connect.unity.com/p/render-crowd-of-animated-characters?signup=true 
+https://github.com/chenjd/Render-Crowd-Of-Animated-Characters
 
-* use gpu instancing to reduce draw call.
+注意几点： 
+mesh不太像例子里面一样有scale，这样导致选中物体却找不到物体，因为被缩放为0.01； 
+动画需要是legacy 
+gpu instance需要opengl es3.0； 
+注意在shader里面勾选enable instance选项； 
+贴图格式为rgbhalf，每个通道16位，增加精度以保存坐标； 
+shader里面从贴图中采样要用tex2dLod确保采样的是mipmap第0级，因为这里的贴图不是普通意义上的贴图，而主要作用是存放信息。
 
-#### 模型资源 ResLink：
-
-[RTS Mini Legion Footman Handpainted](https://www.assetstore.unity3d.com/en/#!/content/86576)
-
----
-#### Bake legacy animation info into anim map：
-
-![1201111111111111.gif](http://upload-images.jianshu.io/upload_images/1372105-004a0ddd0f256df1.gif?imageMogr2/auto-orient/strip)
-
-
-
-![120111111111111.gif](http://upload-images.jianshu.io/upload_images/1372105-35954dfd4ca03f7b.gif?imageMogr2/auto-orient/strip)
-animated characters without animator & skinnedmeshrender.
-
-#### GPU Instancing & mesh render for large number of animated characters：
-![1372105-fa2cb8df2d12c0b3.gif](http://upload-images.jianshu.io/upload_images/1372105-310c57df8cfc83bc.gif?imageMogr2/auto-orient/strip)
-10,000 animated characters with 22 drawcalls.
-
+另外，这个代码有些问题，color里面直接存放坐标，坐标为负数怎么办 
+所以博主对其进行了修改，先获取所有帧，所有顶点的最小值和最大值，然后每个顶点存放相应的0到1之间的比值。同时，需要把shader里面传入顶点坐标的最大值、最小值。
